@@ -17,7 +17,7 @@
         </parent>
 
 	<dependencies>
-                <dependency>
+        <dependency>
             <groupId>com.oppan</groupId>
             <artifactId>service</artifactId>
             <version>1.0.0-SNAPSHOT</version>
