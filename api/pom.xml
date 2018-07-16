@@ -25,7 +25,7 @@
 	</dependencies>
 
 	<build>
-                <finalName>oppansource</finalName>
+        <finalName>oppansource</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
