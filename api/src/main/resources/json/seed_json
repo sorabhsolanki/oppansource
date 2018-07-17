@@ -1,0 +1,14 @@
+db.oppan_property.insert({ name : "kafka.bootstrap.servers", value: "localhost:9092", enabled : true});
+db.oppan_property.insert({ name : "kafka.audit.trail.topic", value: "audit-trail", enabled : true});
+db.oppan_property.insert({ name : "kafka.acks", value: "all", enabled : true});
+db.oppan_property.insert({ name : "kafka.retries", value: "0", enabled : true});
+db.oppan_property.insert({ name : "kafka.batch.size", value: "16384", enabled : true});
+db.oppan_property.insert({ name : "kafka.linger.ms", value: "1", enabled : true});
+db.oppan_property.insert({ name : "kafka.buffer.memory", value: "33554432", enabled : true});
+db.oppan_property.insert({ name : "kafka.block.time.ms", value: "500", enabled : true});
+
+db.oppan_property.insert({ name : "kafka.server.connection.required", value: "true", enabled : true});
+db.oppan_property.insert({ name : "kafka.audit.trail.group.id", value: "audit-trail-group", enabled : true});
+db.oppan_property.insert({ name : "kafka.enable.auto.commit", value: "false", enabled : true});
+db.oppan_property.insert({ name : "kafka.auto.reset.config", value: "earliest", enabled : true});
+db.oppan_property.insert({ name : "kafka.audit.trail.consumer.size", value: "2", enabled : true});
