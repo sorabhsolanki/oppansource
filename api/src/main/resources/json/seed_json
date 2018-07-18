@@ -1,5 +1,5 @@
 db.oppan_property.insert({ name : "kafka.bootstrap.servers", value: "localhost:9092", enabled : true});
-db.oppan_property.insert({ name : "kafka.audit.trail.topic", value: "audit-trail", enabled : true});
+db.oppan_property.insert({ name : "kafka.subscribe.user.topic", value: "user-subscribe", enabled : true});
 db.oppan_property.insert({ name : "kafka.acks", value: "all", enabled : true});
 db.oppan_property.insert({ name : "kafka.retries", value: "0", enabled : true});
 db.oppan_property.insert({ name : "kafka.batch.size", value: "16384", enabled : true});
