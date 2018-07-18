@@ -30,9 +30,19 @@ public class CacheManager {
         return cacheManager;
     }
 
-    private <T> T getCache(Class<T> cacheClass) throws GeneralException {
+    public <T> T getCache(Class<T> cacheClass) throws GeneralException {
         if (cacheClass.isAnnotationPresent(Cache.class)) {
             return (T) getCache(cacheClass.getAnnotation(Cache.class).name());
+        }
+        throw new GeneralException(ErrorCodeConstants.INTERNAL_SERVER_ERROR.getErrorCode(), "@Cache annotation should be present at the class");
+    }
+
+    public void setCache(Object cache) throws GeneralException {
+        Class<?> cacheClass = cache.getClass();
+        if (cacheClass.isAnnotationPresent(Cache.class)) {
+            Cache annotation = cacheClass.getAnnotation(Cache.class);
+            caches.put(annotation.name(), cache);
+            return;
         }
         throw new GeneralException(ErrorCodeConstants.INTERNAL_SERVER_ERROR.getErrorCode(), "@Cache annotation should be present at the class");
     }
@@ -40,4 +50,5 @@ public class CacheManager {
     private Object getCache(String name) {
         return caches.get(name);
     }
+
 }
