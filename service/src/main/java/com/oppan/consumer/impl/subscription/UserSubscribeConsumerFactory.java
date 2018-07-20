@@ -2,10 +2,12 @@ package com.oppan.consumer.impl.subscription;
 
 import com.oppan.consumer.IKafkaConsumerFactory;
 import com.oppan.exception.GeneralException;
+import com.oppan.user.UserRepository;
 import com.oppan.util.ConfigUtil;
 import com.oppan.util.OppansourcePropertyEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Service;
 
@@ -23,9 +25,11 @@ public class UserSubscribeConsumerFactory implements IKafkaConsumerFactory{
 
     private final ExecutorService executorService;
     private final int consumerSize;
+    private final UserRepository userRepository;
 
-    public UserSubscribeConsumerFactory() {
+    public UserSubscribeConsumerFactory(@Qualifier("userRepositoryImpl") UserRepository userRepository) {
         try {
+            this.userRepository = userRepository;
             consumerSize = ConfigUtil
                     .getPropertyValue(OppansourcePropertyEnum.KAFKA_USER_SUBSCRIBE_CONSUMER_SIZE, Integer.class);
             this.executorService = Executors.newFixedThreadPool(consumerSize);
@@ -48,7 +52,7 @@ public class UserSubscribeConsumerFactory implements IKafkaConsumerFactory{
         final String topic = ConfigUtil
                 .getPropertyValue(OppansourcePropertyEnum.KAFKA_SUBSCRIBE_USER_TOPIC, String.class);
         for (int i = 0; i < consumerSize; i++) {
-            executorService.submit(new UserSubscriptionConsumer(getProperty(), topic));
+            executorService.submit(new UserSubscriptionConsumer(getProperty(), topic, userRepository));
         }
     }
 

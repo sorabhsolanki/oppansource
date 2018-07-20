@@ -3,10 +3,12 @@ package com.oppan.user.impl;
 import com.oppan.dto.UserDto;
 import com.oppan.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Repository;
 
 @Repository
+@Qualifier("userRepositoryImpl")
 public class UserRepositoryImpl implements UserRepository{
 
     private final MongoTemplate mongoTemplate;

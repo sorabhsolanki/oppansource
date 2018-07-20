@@ -12,7 +12,7 @@ public class ConfigUtil {
     private static final CacheManager cacheManager = CacheManager.getInstance();
 
     public static <T> T getPropertyValue(OppansourcePropertyEnum oppansourcePropertyEnum, Class<T> type)
-            throws GeneralException {
+            throws GeneralException{
 
         OppanPropertyCache oppanPropertyCache = cacheManager.getCache(OppanPropertyCache.class);
         String value = oppanPropertyCache.getValue(oppansourcePropertyEnum.getPropertyName());
