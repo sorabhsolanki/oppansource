@@ -1,0 +1,147 @@
+Zookeeper start
+==================
+sudo ./zookeeper-server-start.sh ../config/zookeeper.properties
+
+zookeeper run on port 2181
+
+Kafka start
+================
+sudo ./kafka-server-start.sh ../config/server.properties
+
+kafka run on port 9092
+
+Create Topic
+=================
+sudo ./kafka-topics.sh --zookeeper localhost:2181 --create --topic user-subscribe --partitions 2 --replication-factor 1
+
+See all topics
+ ================
+bin/kafka-topics.sh --list --zookeeper localhost:2181
+
+Delete topic
+=============
+bin/kafka-topics.sh --delete --zookeeper localhost:2181 --topic audit-trail
+
+Describe topic
+================
+./kafka-topics.sh --zookeeper localhost:2181 --describe --topic audit-trail
+
+Console producer and Consumer
+=====================
+sudo ./kafka-console-producer.sh --broker-list localhost:9092 --topic audit-trail
+
+sudo ./kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic audit-trail
+
+
+
+
+Making cluster of Kafka
+===========================
+
+let's make cluster of 3 kafka broker so that we can have replication-factor of 3 for the topic.
+
+make 2  copies of server.properties. let's say server-1.properties and server-2.properties
+change required in server-1.properties
+--------------
+broker.id=1
+listeners=PLAINTEXT://:9093
+log.dirs=/tmp/kafka-logs-1
+
+change required in server-2.properties
+--------------
+broker.id=2
+listeners=PLAINTEXT://:9094
+log.dirs=/tmp/kafka-logs-2
+
+start all the kafka brokers.
+
+Now make the topic with replication-factor 3
+./kafka-topics.sh --zookeeper localhost:2181 --create --topic MyfirstTopicXYZ --partitions 2 --replication-factor 3
+
+Describe topic command
+----------------------
+./kafka-topics.sh --zookeeper localhost:2181 --describe --topic MyfirstTopicXYZ
+It will give below o/p.
+
+Topic:MyfirstTopicXYZ	PartitionCount:2	ReplicationFactor:3	Configs:
+	Topic: MyfirstTopicXYZ	Partition: 0	Leader: 0	Replicas: 0,1,2	Isr: 0,1,2
+	Topic: MyfirstTopicXYZ	Partition: 1	Leader: 1	Replicas: 1,2,0	Isr: 1,2,0
+
+
+
+
+Simple Producer Code
+-------------------------------------
+Main properties file:
+Properties pros = new Properties();
+props.put("bootstrap.servers", "localhost:9092,localhost:9093"); //recommendation is to atleast provide 2 broker
+ so that if 1 broker is down then at least it can find another broker.
+
+
+//for serialization-deserilazation
+props.put("key.serializer",
+        "org.apache.kafka.common.serialization.StringSerializer");
+
+props.put("value.serializer",
+        "org.apache.kafka.common.serialization.StringSerializer");
+
+Custom partitioning:
+-----------------------
+if we want some message go to some particular partition and others to some other partition.
+
+
+
+Consumer
+===============================
+if we want to read data in parallel then we have to create consumer-group.
+
+How to parallel read in a single application?
+-----------------------------------------------
+by creating group and starting many consumers in the same group.
+if we have 4 partition inside a topic then start 4 consumer which will belong to same consumer-group.
+if we have only 1 consumer in the consumer-group then it will read from all 4 partitions.
+
+
+The no of partition inside a topic is the upper-limit of the number of consumer in a consumer-group.
+
+Sample code for consumer
+=================================
+Properties props = new Properties();
+
+    props.put("bootstrap.servers", server);
+    props.put("group.id", groupId);
+    props.put("enable.auto.commit", autoCommit);
+    props.put("auto.commit.interval.ms", intervalMs);
+    props.put("session.timeout.ms", timeoutMs);
+    props.put("key.deserializer",
+        "org.apache.kafka.common.serialization.StringDeserializer");
+    props.put("value.deserializer",
+        "org.apache.kafka.common.serialization.StringDeserializer");
+
+if consumer is not part of any group then consumer will read all the data published inside the Topic.
+
+
+
+consumer.subscribe(Arrays.asList(topicName));
+this means that a consumer can subscribe to more than one topic.
+
+
+Offset management
+===================================
+current offset
+committed offset
+
+offset used to maintain the current position of the consumer.
+
+committed offset : the offset position that consumer has confirmed about processing.
+
+It is necessary in partition re-balance.
+
+How to commit an offset
+-----------------------
+enable.auto.commit
+auto.commit.interval.ms
+
+Manual commit: commit sync, commit async
+
+user consumer.commitAsync(); --> for code watch https://www.youtube.com/watch?v=kZT8v2_b2XE

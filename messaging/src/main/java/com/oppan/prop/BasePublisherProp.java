@@ -47,4 +47,8 @@ public class BasePublisherProp {
                 "org.apache.kafka.common.serialization.StringSerializer");
     }
 
+    public Properties getConfigProperties() {
+        return configProperties;
+    }
+
 }
