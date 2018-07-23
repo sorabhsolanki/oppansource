@@ -47,7 +47,7 @@ public class OppanController {
                     .body(new OppansourceResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Error in subscribing user."));
         }
         return ResponseEntity
-                .ok(new OppansourceResponse(HttpStatus.OK.value(), "Push notification sent successfully."));
+                .ok(new OppansourceResponse(HttpStatus.OK.value(), "User subscription request received successfully."));
     }
 
 }
